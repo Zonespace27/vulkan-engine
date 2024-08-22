@@ -94,6 +94,7 @@ struct RenderObject {
 
 	glm::mat4 transform;
 	VkDeviceAddress vertexBufferAddress;
+	Bounds bounds;
 };
 
 struct DrawContext {
@@ -308,3 +309,5 @@ public:
 private:
 	std::unordered_map<std::string, std::shared_ptr<LoadedGLTF>> loadedScenes;
 };
+
+bool is_visible(const RenderObject& obj, const glm::mat4& viewproj);
