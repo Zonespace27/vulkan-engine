@@ -28,12 +28,13 @@ private:
 
 public:
 	void invert();
+	void clear();
 	float magnitude() const;
 	float squareMagnitude() const;
 	void normalize() const;
 	void operator*=(const float value);
 	Vector3 operator*(const float value) const;
-	void operator+=(Vector3& addVector);
+	void operator+=(const Vector3& addVector);
 	void operator+=(glm::vec3& addVector);
 	Vector3 operator+(Vector3& addVector) const;
 	Vector3 operator+(glm::vec3& addVector) const;

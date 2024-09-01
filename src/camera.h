@@ -14,7 +14,7 @@ public:
     glm::mat4 getViewMatrix();
     glm::mat4 getRotationMatrix();
 
-    void processSDLEvent(SDL_Event& e);
+    void processSDLEvent(SDL_Event& e, float deltaTime);
 
     void update();
 };

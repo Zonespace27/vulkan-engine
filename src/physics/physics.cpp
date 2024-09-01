@@ -1,4 +1,4 @@
-#include <physics.h>
+#include <physics/physics.h>
 #include <glm/gtx/norm.hpp>
 
 void PhysicsEngine::invertVec3(glm::vec3 vector) {
@@ -47,6 +47,12 @@ void Vector3::invert() {
 	vector.x = -vector.x;
 	vector.y = -vector.y;
 	vector.z = -vector.z;
+}
+
+void Vector3::clear() {
+	vector.x = 0;
+	vector.y = 0;
+	vector.z = 0;
 }
 
 float Vector3::magnitude() const {
@@ -143,14 +149,15 @@ Vector3 Vector3::vectorProduct(Vector3& v) const {
 	return Vector3(
 		vector.y * v.getZ() - vector.z * v.getY(),
 		vector.z * v.getX() - vector.x * v.getZ(),
-		vector.x * v.getY() - vector.y * v.getX())
-};
+		vector.x * v.getY() - vector.y * v.getX());
+}
+
 Vector3 Vector3::vectorProduct(glm::vec3& v) const {
 	return Vector3(
 		vector.y * v.z - vector.z * v.y,
 		vector.z * v.x - vector.x * v.z,
-		vector.x * v.y - vector.y * v.x)
-};
+		vector.x * v.y - vector.y * v.x);
+}
 
 void Vector3::operator%=(Vector3& v) {
 	*this = vectorProduct(v);

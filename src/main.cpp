@@ -1,4 +1,5 @@
 #include <vk_engine.h>
+#include <thread>
 
 int main(int argc, char* argv[])
 {
@@ -11,6 +12,7 @@ int main(int argc, char* argv[])
 
 	engine.init(isExe);	
 	
+	//std::jthread engine_thread(&VulkanEngine::run, engine);
 	engine.run();	
 
 	engine.cleanup();	

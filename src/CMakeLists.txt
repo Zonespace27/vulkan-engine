@@ -17,6 +17,12 @@ add_executable (engine
   vk_loader.cpp
   camera.cpp
   camera.h
+  physics/physics.h
+  physics/physics.cpp
+  physics/particle.h
+  physics/particle.cpp
+  physics/particle_force_generator.h
+  physics/particle_force_generator.cpp
 )
 
 set_property(TARGET engine PROPERTY CXX_STANDARD 20)

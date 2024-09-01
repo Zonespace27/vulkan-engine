@@ -254,6 +254,8 @@ void VulkanEngine::init(bool isExe)
 
     loadedScenes["structure"] = *structureFile;
 
+    timeBetweenFrames = 1.0f / targetFPS;
+
     // everything went fine
     _isInitialized = true;
 
@@ -679,11 +681,24 @@ void VulkanEngine::run()
 {
     SDL_Event e;
     bool bQuit = false;
+    timeLastFrame = std::chrono::system_clock::now().time_since_epoch().count();
 
     // main loop
     while (!bQuit) {
         //begin clock
         auto start = std::chrono::system_clock::now();
+        float timeRightNow = start.time_since_epoch().count();
+        float timeDiff = timeRightNow - timeLastFrame;
+        // This is gonna need to exist for physics too
+        if (targetFPS != -1 && (timeDiff < timeBetweenFrames)) {
+            std::this_thread::sleep_for(std::chrono::seconds(1) * (timeBetweenFrames - timeDiff));
+        }
+
+        // Calculate deltatime based on the user-provided FPS cap, but we can't do more than 10x physics in a second, even if it should be higher
+        float deltaTime = std::clamp(timeDiff / timeBetweenFrames, 1.f, 10.f);
+        //float deltaTime = std::clamp((targetFPS > deltaTimeTargetFPS ? ((deltaTimeTargetFPS / targetFPS) * (timeDiff / timeBetweenFrames)) : (timeDiff / timeBetweenFrames)), 0.1f, 10.f);
+        timeLastFrame = start.time_since_epoch().count();
+        
         // Handle events on queue
         while (SDL_PollEvent(&e) != 0) {
             // close the window when user alt-f4s or clicks the X button
@@ -699,7 +714,7 @@ void VulkanEngine::run()
                 }
             }
 
-            mainCamera.processSDLEvent(e);
+            mainCamera.processSDLEvent(e, deltaTime);
             ImGui_ImplSDL2_ProcessEvent(&e);
         }
 
@@ -740,6 +755,7 @@ void VulkanEngine::run()
         if (ImGui::Begin("Stats")) {
             ImGui::Text("engine init time %f ms", stats.init_time);
             ImGui::Text("frametime %f ms", stats.frametime);
+            ImGui::Text("deltatime %f", deltaTime);
             ImGui::Text("draw time %f ms", stats.mesh_draw_time);
             ImGui::Text("update time %f ms", stats.scene_update_time);
             ImGui::Text("triangles %i", stats.triangle_count);
@@ -758,8 +774,10 @@ void VulkanEngine::run()
 
         //convert to microseconds (integer), and then come back to miliseconds
         auto elapsed = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+        //timeLastFrame = elapsed.count();
         stats.frametime = elapsed.count() / 1000.f;
     }
+    //cleanup();
 }
 
 //// Swapchain things ////

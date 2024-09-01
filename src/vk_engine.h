@@ -308,6 +308,18 @@ public:
 	// GLTF LOADING STUFF
 private:
 	std::unordered_map<std::string, std::shared_ptr<LoadedGLTF>> loadedScenes;
+
+	// DELTA TIME STUFF
+	float timeLastFrame;
+	/// <summary>
+	/// If the framerate goes over this number, then deltaTime should decrease in order to keep speed equivalent-ish to this framerate
+	/// </summary>
+	//float deltaTimeTargetFPS = 60;
+	/// <summary>
+	/// How many FPS should the game render/handle physics at. If it would go over the given framerate, sleep until the next frame should happen
+	/// </summary>
+	float targetFPS = 240;
+	float timeBetweenFrames;
 };
 
 bool is_visible(const RenderObject& obj, const glm::mat4& viewproj);

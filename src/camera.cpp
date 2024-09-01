@@ -10,13 +10,13 @@ void Camera::update()
     position += glm::vec3(cameraRotation * glm::vec4(velocity * 0.5f, 0.f));
 }
 
-void Camera::processSDLEvent(SDL_Event& e)
+void Camera::processSDLEvent(SDL_Event& e, float deltaTime)
 {
     if (e.type == SDL_KEYDOWN) {
-        if (e.key.keysym.sym == SDLK_w) { velocity.z = -1; }
-        if (e.key.keysym.sym == SDLK_s) { velocity.z = 1; }
-        if (e.key.keysym.sym == SDLK_a) { velocity.x = -1; }
-        if (e.key.keysym.sym == SDLK_d) { velocity.x = 1; }
+        if (e.key.keysym.sym == SDLK_w) { velocity.z = -1.f * deltaTime; }
+        if (e.key.keysym.sym == SDLK_s) { velocity.z = 1.f * deltaTime; }
+        if (e.key.keysym.sym == SDLK_a) { velocity.x = -1.f * deltaTime; }
+        if (e.key.keysym.sym == SDLK_d) { velocity.x = 1.f * deltaTime; }
     }
 
     if (e.type == SDL_KEYUP) {
